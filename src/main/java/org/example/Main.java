@@ -87,6 +87,7 @@ public class Main {
         }
     }
 
+    //This method displays the board for the PLAYER with unrevealed positions.
     private static void displayPlayBoard() {
         System.out.println();
         System.out.println();
@@ -121,72 +122,102 @@ public class Main {
             System.out.println("YOU LOST");
             displayBoard();
             System.exit(0);
-        }else if(doYouWin()){
-            System.out.println("YOU WIN");
-            System.exit(0);
-        }else{
+        }else {
             System.out.println("CONTINUE GAME");
 
             playBoard[row][col] = countMines(row, col);
             //checking the surroundings
             reveal(row, col);
+
+            if(doYouWin()) {
+                System.out.println("YOU WIN");
+                System.exit(0);
+            }
         }
     }
 
     public static void reveal(int row, int col){
-        //check 8 sides
-        if(row > 0 && row < 7 && col > 0 && col < 7 && board[row][col]==0){
+        //check 8 sides row > 0 && row < 7 && col > 0 && col < 7 &&
+        if(board[row][col]==0){
             //top
-            if(playBoard[row-1][col] == 9){
-                playBoard[row-1][col] = board[row-1][col];
-                if(board[row-1][col]==0) reveal(row-1, col);
+            if(row-1>=0) {
+                if (playBoard[row - 1][col] == 9) {
+                    playBoard[row - 1][col] = board[row - 1][col];
+                    if (board[row - 1][col] == 0) reveal(row - 1, col);
+                }
             }
+
             //bottom
-            if(playBoard[row+1][col] == 9){
-                playBoard[row+1][col] = board[row+1][col];
-                if(board[row+1][col]==0) reveal(row+1, col);
+            if(row+1<ROWS) {
+                if (playBoard[row + 1][col] == 9) {
+                    playBoard[row + 1][col] = board[row + 1][col];
+                    if (board[row + 1][col] == 0) reveal(row + 1, col);
+                }
             }
+
             //left
-            if(playBoard[row][col-1] == 9){
-                playBoard[row][col-1] = board[row][col-1];
-                if(board[row][col-1]==0) reveal(row, col-1);
+            if(col-1>=0) {
+                if (playBoard[row][col - 1] == 9) {
+                    playBoard[row][col - 1] = board[row][col - 1];
+                    if (board[row][col - 1] == 0) reveal(row, col - 1);
+                }
             }
+
             //right
-            if(playBoard[row][col+1] == 9){
-                playBoard[row][col+1] = board[row][col+1];
-                if(board[row][col+1]==0) reveal(row, col+1);
+            if(col+1<COLS) {
+                if (playBoard[row][col + 1] == 9) {
+                    playBoard[row][col + 1] = board[row][col + 1];
+                    if (board[row][col + 1] == 0) reveal(row, col + 1);
+                }
             }
+
             //top left
-            if(playBoard[row-1][col-1] == 9){
-                playBoard[row-1][col-1] = board[row-1][col-1];
-                if(board[row-1][col]==0) reveal(row-1, col);
+            if(row-1>=0 && col-1>=0) {
+                if (playBoard[row - 1][col - 1] == 9) {
+                    playBoard[row - 1][col - 1] = board[row - 1][col - 1];
+                    if (board[row - 1][col - 1] == 0) reveal(row - 1, col - 1);
+                }
             }
+
             //top right
-            if(playBoard[row-1][col+1] == 9){
-                playBoard[row-1][col+1] = board[row-1][col+1];
-                if(board[row-1][col]==0) reveal(row-1, col);
+            if(row-1>=0 && col+1<COLS) {
+                if (playBoard[row - 1][col + 1] == 9) {
+                    playBoard[row - 1][col + 1] = board[row - 1][col + 1];
+                    if (board[row - 1][col + 1] == 0) reveal(row - 1, col + 1);
+                }
             }
+
             //bottom left
-            if(playBoard[row+1][col-1] == 9){
-                playBoard[row+1][col-1] = board[row+1][col-1];
-                if(board[row-1][col]==0) reveal(row-1, col);
+            if(row+1<ROWS && col-1>=0) {
+                if (playBoard[row + 1][col - 1] == 9) {
+                    playBoard[row + 1][col - 1] = board[row + 1][col - 1];
+                    if (board[row + 1][col - 1] == 0) reveal(row + 1, col - 1);
+                }
             }
+
             //bottom right
-            if(playBoard[row+1][col+1] == 9){
-                playBoard[row+1][col+1] = board[row+1][col+1];
-                if(board[row-1][col]==0) reveal(row-1, col);
+            if(row+1<ROWS && col+1<COLS) {
+                if (playBoard[row + 1][col + 1] == 9) {
+                    playBoard[row + 1][col + 1] = board[row + 1][col + 1];
+                    if (board[row + 1][col + 1] == 0) reveal(row + 1, col + 1);
+                }
             }
         }//end 8 sides verification
     }
 
     public static boolean doYouWin(){
+        int counter = 0;
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                if(playBoard[i][j]==9) return false;
+                if(playBoard[i][j]==9) counter++;
             }
         }
 
-        return true;
+        if(counter==MINES){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public static void main(String[] args) {
@@ -202,8 +233,6 @@ public class Main {
             int col = read.nextInt();
             revealCell(row, col);
         }
-        // Example of the function to be implemented, should return the board updated
-
     }
 
     // Utility class for a simple Pair implementation
